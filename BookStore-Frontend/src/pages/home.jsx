@@ -4,6 +4,7 @@ import MenuBar from '../components/menu-bar'
 import SearchBar from '../components/search-bar'
 import '../css/home.css'
 import { getBooks } from '../service/book'
+import { mode, setMode } from '../App'
 
 let book = []
 
@@ -74,7 +75,7 @@ export default function HomePage() {
   document.body.style.overflow = 'auto'
   return (
     <div>
-      <MenuBar index={0} />
+      <MenuBar index={0} mode={mode} />
       <SearchBar placeholder='请输入书籍名、作者名等关键词搜索相关书籍' />
       <div id='BookDisplay'>
         <ul ref={category} id='BookDisplay-category'>

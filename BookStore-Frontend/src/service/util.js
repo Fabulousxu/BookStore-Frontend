@@ -47,7 +47,7 @@ export async function del(url, data) {
 }
 
 export function errorHandle(err, navigate) {
-  if (err === 401) {
+  if (err !== 404) {
     alert('登录已失效，请重新登录！')
     navigate('/login')
   } else alert(err)

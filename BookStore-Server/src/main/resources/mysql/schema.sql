@@ -2,20 +2,21 @@ DROP DATABASE IF EXISTS bookstore;
 CREATE DATABASE bookstore;
 USE bookstore;
 
-# 账户密码表
-CREATE TABLE account
-(
-    user_id  BIGINT PRIMARY KEY AUTO_INCREMENT, # 用户id
-    nickname VARCHAR(16) NOT NULL,              # 用户名
-    password VARCHAR(16) NOT NULL               # 密码
-);
-
 # 用户信息表
 CREATE TABLE user
 (
-    user_id BIGINT PRIMARY KEY AUTO_INCREMENT, # 用户id
-    balance BIGINT DEFAULT 0,                  # 余额
-    FOREIGN KEY (user_id) REFERENCES account (user_id) ON DELETE CASCADE ON UPDATE CASCADE
+    user_id  BIGINT PRIMARY KEY AUTO_INCREMENT, # 用户id
+    nickname VARCHAR(16) NOT NULL,              # 昵称
+    balance  BIGINT DEFAULT 0                   # 余额
+);
+
+# 账户密码表
+CREATE TABLE account
+(
+    user_id  BIGINT PRIMARY KEY,   # 用户id
+    username VARCHAR(16) NOT NULL, # 用户名
+    password VARCHAR(16) NOT NULL, # 密码
+    FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 # 书籍信息表

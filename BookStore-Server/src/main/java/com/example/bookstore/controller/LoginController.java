@@ -16,7 +16,7 @@ public class LoginController {
   @PostMapping
   public JSONObject login(@RequestBody JSONObject param, HttpSession session) {
     JSONObject res = new JSONObject();
-    Account account = accountRepository.findByNickname(param.getString("username"));
+    Account account = accountRepository.findByUsername(param.getString("username"));
     if (account == null) {
       res.put("ok", false);
       res.put("message", "用户不存在");

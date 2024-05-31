@@ -6,6 +6,7 @@ import { comment, getBookComments, getBookInfo } from '../service/book'
 import { addIntoCart } from '../service/cart'
 import qs from 'query-string'
 import { errorHandle } from '../service/util'
+import { mode } from '../App'
 
 let id
 
@@ -192,7 +193,7 @@ export default function BookPage(props) {
 
   return (
     <div>
-      <MenuBar index={-1} />
+      <MenuBar index={-1} mode={mode} />
       <div id='BookInfo'>
         <img id='BookInfo-cover' src={cover} alt='book' />
         <div id='BookInfo-flex'>

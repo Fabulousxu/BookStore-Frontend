@@ -6,6 +6,7 @@ import { getCart, removeFromCart, setCartItemNumber } from '../service/cart'
 import { placeOrder } from '../service/order'
 import '../css/cart.css'
 import { errorHandle } from '../service/util'
+import { mode } from '../App'
 
 let cart = [], itemIds = []
 
@@ -140,7 +141,7 @@ export default function CartPage() {
 
   return (
     <div>
-      <MenuBar index={4} />
+      <MenuBar index={5} mode={mode} />
       <div id='Cart'>
         <h1 id='Cart-title'>购物车，共{cartTotalCount}条</h1>
         <div className='Cart-line' />

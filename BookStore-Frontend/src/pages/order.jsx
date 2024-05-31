@@ -4,6 +4,7 @@ import MenuBar from '../components/menu-bar'
 import '../css/order.css'
 import { getOrder } from '../service/order'
 import { errorHandle } from '../service/util'
+import { mode } from '../App'
 
 let order = []
 
@@ -63,7 +64,7 @@ export default function OrderPage() {
 
   return (
     <div>
-      <MenuBar index={1} />
+      <MenuBar index={1} mode={mode} />
       <div id='Order'>
         <h1 id='Order-title'>全部订单，共{orderTotalCount}条</h1>
         <div className='Order-line' />

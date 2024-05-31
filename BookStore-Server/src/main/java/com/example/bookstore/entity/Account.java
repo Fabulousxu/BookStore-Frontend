@@ -8,10 +8,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Account {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long userId;
-
-  private String nickname;
+  @Id private long userId;
+  private String username;
   private String password;
+
+  @OneToOne
+  @JoinColumn(name = "user_id")
+  private User user;
 }

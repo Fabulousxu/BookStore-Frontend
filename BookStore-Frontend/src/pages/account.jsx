@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import MenuBar from '../components/menu-bar'
 import '../css/account.css'
+import { mode } from '../App'
 
 export default function AccountPage() {
   const [username, setUsername] = useState(),
@@ -28,7 +29,7 @@ export default function AccountPage() {
 
   return (
     <div>
-      <MenuBar index={5} />
+      <MenuBar index={6} mode={mode} />
       <div id='Account'>
         <div id='Account-info'>
           <div id='Account-flex'>

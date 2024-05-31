@@ -1,7 +1,7 @@
 .SearchBar {
   display: flex;
   position: relative;
-  width: 40%;
+  width: 50%;
   height: 45px;
   margin: 90px auto 30px;
   border-radius: 7px;

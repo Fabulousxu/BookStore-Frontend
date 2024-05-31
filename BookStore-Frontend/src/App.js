@@ -8,6 +8,10 @@ import CartPage from './pages/cart'
 import AccountPage from './pages/account'
 import BookPage from './pages/book'
 import MenuBar from './components/menu-bar'
+import ManagePage from './pages/manage'
+
+export let mode = 'admin',
+  setMode = m => mode = m
 
 export default function App() {
   return (
@@ -21,7 +25,8 @@ export default function App() {
           <Route path='/order' element={<OrderPage />} />
           <Route path='/stat' element={<StatPage />} />
           <Route path='/cart' element={<CartPage />} />
-          <Route path='/sky' element={<MenuBar index={3} />} />
+          <Route path='/sky' element={<MenuBar index={3} mode={mode} />} />
+          <Route path='/manage' element={<ManagePage />} />
           <Route path='/account' element={<AccountPage />} />
           <Route path='/book' element={<BookPage />} />
         </Routes>

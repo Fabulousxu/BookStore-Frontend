@@ -8,7 +8,8 @@ export default function MenuBar(props) {
     { text: "首页", url: "/home" },
     { text: "订单", url: "/order" },
     { text: "统计", url: "/stat" },
-    { text: "星空", url: "/sky"}
+    { text: "星空", url: "/sky" },
+    { text: "管理", url: "/manage" }
   ]
   const navigate = useNavigate()
   let username = 'xupeigong'
@@ -19,7 +20,7 @@ export default function MenuBar(props) {
       <ul id='MenuBar-menu'>
         {
           menuList.map((item, index) =>
-            <li
+            (index !== 4 || props.mode === 'admin') && <li
               key={index}
               className={props.index === index ? 'MenuBar-menuList MenuBar-menuList-active' : 'MenuBar-menuList'}
               onClick={() => navigate(item.url)}

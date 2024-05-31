@@ -1,18 +1,18 @@
-# 创建测试账户密码信息
-INSERT INTO account (nickname, password)
-VALUES ('xpg0399', 'xpg'),
-       ('u2', 'abc'),
-       ('u3', 'abc'),
-       ('u4', 'abc'),
-       ('u5', 'abc');
-
 # 创建测试用户信息
-INSERT INTO user (user_id)
-VALUES (1),
-       (2),
-       (3),
-       (4),
-       (5);
+INSERT INTO user (nickname)
+VALUES ('user1'),
+       ('user2'),
+       ('user3'),
+       ('user4'),
+       ('user5');
+
+# 创建测试用户账号密码信息
+INSERT INTO account (user_id, username, password)
+VALUES (1, 'u1', '123'),
+       (2, 'u2', '123'),
+       (3, 'u3', '123'),
+       (4, 'u4', '123'),
+       (5, 'u5', '123');
 
 # 创建测试书籍信息
 INSERT INTO book (title, author, description, price, cover)
