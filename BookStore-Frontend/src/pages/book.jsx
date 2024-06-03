@@ -6,7 +6,6 @@ import { comment, getBookComments, getBookInfo } from '../service/book'
 import { addIntoCart } from '../service/cart'
 import qs from 'query-string'
 import { errorHandle } from '../service/util'
-import { mode } from '../App'
 
 let id
 
@@ -115,37 +114,29 @@ export default function BookPage(props) {
       addIntoCart(id).then(() => {
         alert('已成功加入购物车！')
         navigate('/cart')
-      }).catch(err => {
-        if (err === 401) {
-          alert('登录已失效，请重新登录！')
-          navigate('/login')
-        } else alert(err)
-      })
+      }).catch(err => errorHandle(err, navigate))
     },
     onLastPage = () => {
       if (currPage <= 1) return
-      getBookComments(id, 0, 1, '').then(res => {
-        setCommentTotalCount(res.total)
-        getBookComments(id, currPage - 2, 10, 'createdTime')
-          .then(res => {
-            setTotalPage(res.total)
-            setCurrPage(currPage - 1)
-            setCommentList(res.list)
-          }).catch(err => errorHandle(err, navigate))
-      }).catch(err => errorHandle(err, navigate))
+      setCurrPage(currPage - 1)
+      getBookComments(id, currPage - 2, 10, 'createdTime')
+        .then(res => {
+          setCommentTotalCount(res.totalNumber)
+          setTotalPage(res.totalPage)
+          setCurrPage(currPage - 1)
+          setCommentList(res.list)
+        }).catch(err => errorHandle(err, navigate))
     },
     onNextPage = () => {
       if (currPage >= totalPage) return
       setCurrPage(currPage + 1)
-      getBookComments(id, 0, 1, '').then(res => {
-        setCommentTotalCount(res.total)
-        getBookComments(id, currPage, 10, 'createdTime')
-          .then(res => {
-            setTotalPage(res.total)
-            setCurrPage(currPage + 1)
-            setCommentList(res.list)
-          }).catch(err => errorHandle(err, navigate))
-      }).catch(err => errorHandle(err, navigate))
+      getBookComments(id, currPage, 10, 'createdTime')
+        .then(res => {
+          setCommentTotalCount(res.totalNumber)
+          setTotalPage(res.totalPage)
+          setCurrPage(currPage + 1)
+          setCommentList(res.list)
+        }).catch(err => errorHandle(err, navigate))
     },
     onCommentSubmit = () => {
       let connent = commentInput.current.value
@@ -155,15 +146,13 @@ export default function BookPage(props) {
       }
       comment(id, connent).then(() => {
         alert('评论成功！')
-        getBookComments(id, 0, 1, '').then(res => {
-          setCommentTotalCount(res.total)
-          getBookComments(id, 0, 10, 'createdTime')
-            .then(res => {
-              setTotalPage(res.total)
-              setCurrPage(1)
-              setCommentList(res.list)
-            }).catch(err => errorHandle(err, navigate))
-        }).catch(err => errorHandle(err, navigate))
+        getBookComments(id, 0, 10, 'createdTime')
+          .then(res => {
+            setCommentTotalCount(res.totalNumber)
+            setTotalPage(res.totalPage)
+            setCurrPage(1)
+            setCommentList(res.list)
+          }).catch(err => errorHandle(err, navigate))
       }).catch(err => errorHandle(err, navigate))
       setShowModal(false)
     }
@@ -174,26 +163,24 @@ export default function BookPage(props) {
       setBookInfo({
         ...res,
         category: '畅销书籍',
-        state: { flag: true, count: 0x7fffffff },
+        state: { flag: true, count: res.repertory },
         score: { value: '5.0', count: res.sales, rate5: 1, rate4: 0, rate3: 0, rate2: 0, rate1: 0 },
         commentTotalCount: 1000,
         totalPage: 100
       })
-      getBookComments(id, 0, 1, '').then(res => {
-        setCommentTotalCount(res.total)
-        getBookComments(id, 0, 10, 'createdTime')
-          .then(res => {
-            setTotalPage(res.total)
-            setCurrPage(1)
-            setCommentList(res.list)
-          }).catch(err => errorHandle(err, navigate))
-      }).catch(err => errorHandle(err, navigate))
+      getBookComments(id, 0, 10, 'createdTime')
+        .then(res => {
+          setCommentTotalCount(res.totalNumber)
+          setTotalPage(res.totalPage)
+          setCurrPage(1)
+          setCommentList(res.list)
+        }).catch(err => errorHandle(err, navigate))
     }).catch(err => errorHandle(err, navigate))
   }, [])
 
   return (
     <div>
-      <MenuBar index={-1} mode={mode} />
+      <MenuBar index={-1} />
       <div id='BookInfo'>
         <img id='BookInfo-cover' src={cover} alt='book' />
         <div id='BookInfo-flex'>

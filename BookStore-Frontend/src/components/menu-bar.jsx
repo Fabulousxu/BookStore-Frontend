@@ -3,6 +3,8 @@ import '../css/menu-bar.css'
 import cartImg from '../images/cart.png'
 import accountImg from '../images/account.png'
 
+export let mode, setMode = m => mode = m
+
 export default function MenuBar(props) {
   const menuList = [
     { text: "首页", url: "/home" },
@@ -20,7 +22,7 @@ export default function MenuBar(props) {
       <ul id='MenuBar-menu'>
         {
           menuList.map((item, index) =>
-            (index !== 4 || props.mode === 'admin') && <li
+            (index !== 4 || mode === 'admin') && <li
               key={index}
               className={props.index === index ? 'MenuBar-menuList MenuBar-menuList-active' : 'MenuBar-menuList'}
               onClick={() => navigate(item.url)}

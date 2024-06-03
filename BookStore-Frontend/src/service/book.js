@@ -10,10 +10,18 @@ export async function searchBooks(keyword, pageIndex, pageSize) {
       author: item.author,
       price: item.price,
       cover: item.cover,
+      isbn: item.isbn,
+      sales: item.sales,
+      repertory: item.repertory,
+      description: item.description,
       index: index
     })
   })
-  return bookList
+  return {
+    totalNumber: res.totalNumber,
+    totalPage: res.totalPage,
+    list: bookList
+  }
 }
 
 export async function getBooks(pageIndex, pageSize) {
@@ -29,7 +37,9 @@ export async function getBookInfo(id) {
     price: res.price,
     intro: res.description,
     cover: res.cover,
-    sales: res.sales
+    isbn: res.isbn,
+    sales: res.sales,
+    repertory: res.repertory,
   }
 }
 
@@ -38,10 +48,10 @@ export async function getBookComments(id, pageIndex, pageSize, sort) {
     commentList = []
   res.items.forEach(item => {
     let datetime = new Date(item.createdAt),
-        y = datetime.getFullYear(),
-        m = datetime.getMonth() + 1,
-        d = datetime.getDate(),
-        time = y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d) + " " + datetime.toTimeString().substr(0, 8);
+      y = datetime.getFullYear(),
+      m = datetime.getMonth() + 1,
+      d = datetime.getDate(),
+      time = y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d) + " " + datetime.toTimeString().substr(0, 8);
     commentList.push({
       id: item.id,
       username: item.username,
@@ -52,7 +62,8 @@ export async function getBookComments(id, pageIndex, pageSize, sort) {
     })
   })
   return {
-    total: res.total,
+    totalNumber: res.totalNumber,
+    totalPage: res.totalPage,
     list: commentList
   }
 }

@@ -1,4 +1,3 @@
-// export const apiURL = 'https://10.119.12.209:8080/api'
 export const apiURL = 'http://localhost:8080/api'
 
 export async function get(url) {
@@ -47,7 +46,7 @@ export async function del(url, data) {
 }
 
 export function errorHandle(err, navigate) {
-  if (err !== 404) {
+  if (err === 400 || err === 401) {
     alert('登录已失效，请重新登录！')
     navigate('/login')
   } else alert(err)

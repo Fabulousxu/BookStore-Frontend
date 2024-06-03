@@ -51,7 +51,7 @@ public class Comment {
   public JSONObject toJson(User user) {
     JSONObject res = new JSONObject();
     res.put("id", commentId);
-    res.put("username", user.getAccount().getUsername());
+    res.put("username", user.getUsername());
     res.put("content", content);
     res.put("createdAt", createdAt);
     res.put("like", like);

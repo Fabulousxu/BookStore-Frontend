@@ -1,4 +1,4 @@
-package com.example.bookstore.dao;
+package com.example.bookstore.repository;
 
 import com.example.bookstore.entity.Book;
 import org.springframework.data.domain.Page;
@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
-  Page<Book> findByTitleContainsOrAuthorContainsOrDescriptionContains(
-      String title, String author, String description, Pageable pageable);
+  Page<Book> findByTitleContainsOrAuthorContainsOrDescriptionContainsOrIsbnContains(
+      String title, String author, String description, String isbn, Pageable pageable);
 }

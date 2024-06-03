@@ -119,7 +119,7 @@
 }
 
 #Manage-ul {
-  /* display: none; */
+  display: none;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -136,7 +136,7 @@
   padding: 0;
   list-style: none;
   transition: all 0.2s;
-  /* visibility: hidden; */
+  visibility: hidden;
 }
 
 .Manage-li:hover {
@@ -263,16 +263,10 @@
 .ManageUser-username {
   color: rgb(255, 255, 255);
   font: 18px 微软雅黑;
-  flex-grow: 1;
+  width: 150px;
 }
 
 .ManageUser-email {
-  color: rgb(151, 151, 151);
-  font: 18px 微软雅黑;
-  flex-grow: 1;
-}
-
-.ManageUser-password {
   color: rgb(151, 151, 151);
   font: 18px 微软雅黑;
   flex-grow: 1;
@@ -301,7 +295,7 @@
   cursor: pointer;
 }
 
-.ManageUser-slience {
+.ManageUser-silence {
   margin: auto 8px;
   padding: 10px 15px;
   border: none;
@@ -312,13 +306,13 @@
   transition: all 0.1s;
 }
 
-.ManageUser-slience:hover {
+.ManageUser-silence:hover {
   transform: scale(1.02);
   background-color: rgb(167, 167, 167);
   cursor: pointer;
 }
 
-.ManageUser-slience:active {
+.ManageUser-silence:active {
   transform: scale(0.98);
   background-color: rgb(202, 202, 202);
   cursor: pointer;
@@ -555,6 +549,7 @@
   margin: 0;
   border: 2px solid rgb(255, 255, 255);
   border-radius: 10px;
+  color: white;
 }
 
 #ManageBook-modal-flex2 {
@@ -677,8 +672,8 @@
   justify-content: center;
   position: absolute;
   width: 400px;
-  height: 300px;
-  top: calc(50% - 150px);
+  height: 220px;
+  top: calc(50% - 110px);
   left: calc(50% - 200px);
   border-radius: 20px;
   background: rgb(60, 60, 60);
@@ -694,4 +689,27 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
+}
+
+#Manage-addBook {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+#Manage-addBook-button {
+  width: 100%;
+  padding: 40px;
+  border: none;
+  background-color: transparent;
+  color: rgb(184, 184, 184);
+  font-size: 20px;
+}
+
+#Manage-addBook-button:hover {
+  background-color: rgba(0, 0, 0, 0.554);
+  color: rgb(255, 255, 255);
+  cursor: pointer;
 }

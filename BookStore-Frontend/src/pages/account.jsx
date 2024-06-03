@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import MenuBar from '../components/menu-bar'
 import '../css/account.css'
-import { mode } from '../App'
 
 export default function AccountPage() {
   const [username, setUsername] = useState(),
@@ -29,7 +28,7 @@ export default function AccountPage() {
 
   return (
     <div>
-      <MenuBar index={6} mode={mode} />
+      <MenuBar index={6} />
       <div id='Account'>
         <div id='Account-info'>
           <div id='Account-flex'>
@@ -41,19 +40,19 @@ export default function AccountPage() {
           </div>
           <div id='Account-phone'>
             <div style={{ fontSize: '15px' }}>电话</div>
-            <input className='Account-input' value={phone} onChange={(event) => setUsername(event.target.value)} />
+            <input className='Account-input' value={phone} onChange={(event) => setPhone(event.target.value)} />
           </div>
           <div id='Account-email'>
             <div style={{ fontSize: '15px' }}>邮箱</div>
-            <input className='Account-input' value={email} onChange={(event) => setUsername(event.target.value)} />
+            <input className='Account-input' value={email} onChange={(event) => setEmail(event.target.value)} />
           </div>
           <div id='Account-address'>
             <div style={{ fontSize: '15px' }}>收货地址</div>
-            <input className='Account-input' value={address} onChange={(event) => setUsername(event.target.value)} />
+            <input className='Account-input' value={address} onChange={(event) => setAddress(event.target.value)} />
           </div>
           <div id='Account-intro'>
             <div style={{ fontSize: '15px' }}>用户简介</div>
-            <input className='Account-input' value={intro} onChange={(event) => setUsername(event.target.value)} />
+            <input className='Account-input' value={intro} onChange={(event) => setIntro(event.target.value)} />
           </div>
         </div>
         <div id='Account-operation'>

@@ -3,10 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import MenuBar from '../components/menu-bar'
 import SearchBar from '../components/search-bar'
 import '../css/home.css'
-import { getBooks } from '../service/book'
-import { mode, setMode } from '../App'
-
-let book = []
+import { getBooks, searchBooks } from '../service/book'
+import { errorHandle } from '../service/util'
 
 export default function HomePage() {
   const categoryList = [
@@ -25,8 +23,7 @@ export default function HomePage() {
     }, {
       text: '科普'
     }
-  ]
-  const category = useRef(null),
+  ], category = useRef(null),
     categoryOnclick = (index) => {
       let list = category.current.children
       for (let i = 0; i < list.length; ++i)
@@ -34,6 +31,7 @@ export default function HomePage() {
     },
     [currPage, setCurrPage] = useState(1),
     [totalPage, setTotalPage] = useState(1),
+    [keyword, setKeyword] = useState(''),
     navigate = useNavigate(),
     bookList = useRef(null),
     setBookList = (list = [{ title: '-', author: '-', price: '-', cover: '', index: '' }]) => {
@@ -57,26 +55,46 @@ export default function HomePage() {
           }
         }
       })
+    },
+    onLastPage = () => {
+      if (currPage <= 1) return
+      setCurrPage(currPage - 1)
+      searchBooks(keyword, currPage - 2, 30).then(res => {
+        setTotalPage(res.totalPage)
+        setBookList(res.list)
+      }).catch(err => errorHandle(err, navigate))
+    },
+    onNextPage = () => {
+      if (currPage >= totalPage) return
+      setCurrPage(currPage + 1)
+      searchBooks(keyword, currPage, 30).then(res => {
+        setTotalPage(res.totalPage)
+        setBookList(res.list)
+      }).catch(err => errorHandle(err, navigate))
+    },
+    onSearch = e => {
+      setKeyword(e.target.value)
+      searchBooks(e.target.value, 0, 30).then(res => {
+        setTotalPage(res.totalPage)
+        setCurrPage(1)
+        setBookList(res.list)
+      }).catch(err => errorHandle(err, navigate))
     }
 
+
   useEffect(() => {
-    getBooks(0, 30).then(list => {
-      book = list
-      setTotalPage(Math.ceil(book.length / 30))
-      setBookList(book.slice(0, 30))
-    }).catch(err => {
-      if (err === 401) {
-        alert('登录已失效，请重新登录！')
-        navigate('/login')
-      } else alert(err)
-    })
+    getBooks(0, 30).then(res => {
+      setTotalPage(res.totalPage)
+      setCurrPage(1)
+      setBookList(res.list)
+    }).catch(err => errorHandle(err, navigate))
   }, [])
 
   document.body.style.overflow = 'auto'
   return (
     <div>
-      <MenuBar index={0} mode={mode} />
-      <SearchBar placeholder='请输入书籍名、作者名等关键词搜索相关书籍' />
+      <MenuBar index={0} />
+      <SearchBar placeholder='请输入书籍名、作者名等关键词搜索相关书籍' keyword={keyword} onChange={onSearch} />
       <div id='BookDisplay'>
         <ul ref={category} id='BookDisplay-category'>
           {
@@ -114,9 +132,9 @@ export default function HomePage() {
           </div>
 
           <div id='BookDisplay-pageShift'>
-            <button className='BookDisplay-pageShift-button'>上一页</button>
+            <button className='BookDisplay-pageShift-button' onClick={onLastPage}>上一页</button>
             <span id='BookDisplay-pageShift-text'>第 {currPage} 页 / 共 {totalPage} 页</span>
-            <button className='BookDisplay-pageShift-button'>下一页</button>
+            <button className='BookDisplay-pageShift-button' onClick={onNextPage}>下一页</button>
           </div>
         </div>
       </div>

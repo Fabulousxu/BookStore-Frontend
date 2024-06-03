@@ -6,15 +6,15 @@ import { getCart, removeFromCart, setCartItemNumber } from '../service/cart'
 import { placeOrder } from '../service/order'
 import '../css/cart.css'
 import { errorHandle } from '../service/util'
-import { mode } from '../App'
 
-let cart = [], itemIds = []
+let cart = [], itemIds = [], isSingleBuy, itemId = []
 
 export default function CartPage() {
   const [currPage, setCurrPage] = useState(1),
     [totalPage, setTotalPage] = useState(1),
     [cartTotalCount, setCartTotalCount] = useState(1),
     [showModal, setShowModal] = useState(false),
+    [checked, setChecked] = useState([false, false, false, false, false, false, false, false, false, false]),
     cartList = useRef(null),
     receiverInput = useRef(null),
     telInput = useRef(null),
@@ -66,8 +66,8 @@ export default function CartPage() {
     },
     onSingleBuy = idx => {
       let book = cart[(currPage - 1) * 10 + idx]
-      itemIds = []
-      for (let i = 0; i < book.number; i++) itemIds.push(book.itemId)
+      isSingleBuy = true
+      itemId = [book.itemId]
       setShowModal(true)
     },
     onSingleRemove = idx => {
@@ -79,18 +79,14 @@ export default function CartPage() {
           setTotalPage(Math.ceil(cart.length / 10))
           setCartList(cart.slice(0, 10))
         })
-      }).catch(err => {
-        if (err === 401) {
-          alert('登录已失效，请重新登录！')
-          navigate('/login')
-        } else alert(err)
-      })
+      }).catch(err => errorHandle(err, navigate))
     },
     onBuy = () => {
-      alert('暂仅支持点击书籍右侧按钮购买')
+      isSingleBuy = false
+      setShowModal(true)
     },
     onRemove = () => {
-      alert('暂不支持移出购物车')
+      alert('暂仅支持点击购物车右侧按钮移出购物车')
     },
     onReceiverInputKeyUp = e => {
       if (e.key === 'Enter' && receiverInput.current.value !== '')
@@ -118,9 +114,10 @@ export default function CartPage() {
         addressInput.current.focus()
         return
       }
-      placeOrder(receiver, tel, address, itemIds)
+      placeOrder(receiver, tel, address, isSingleBuy ? itemId : itemIds)
         .then(() => {
           setShowModal(false)
+          itemIds = []
           alert('下单成功')
           navigate('/order')
         }).catch(err => errorHandle(err, navigate))
@@ -128,9 +125,17 @@ export default function CartPage() {
     onBookInfo = idx => {
       let book = cart[(currPage - 1) * 10 + idx]
       navigate(`/book?id=${book.id}`)
+    },
+    onCheck = (flag, idx) => {
+      if (flag) itemIds.push(cart[(currPage - 1) * 10 + idx].itemId)
+      else itemIds = itemIds.filter(id => id !== cart[(currPage - 1) * 10 + idx].itemId)
+      let newChecked = checked
+      newChecked[idx] = flag
+      setChecked(newChecked)
     }
 
   useEffect(() => {
+    itemIds = []
     getCart().then(list => {
       cart = list
       setCartTotalCount(cart.length)
@@ -141,7 +146,7 @@ export default function CartPage() {
 
   return (
     <div>
-      <MenuBar index={5} mode={mode} />
+      <MenuBar index={5} />
       <div id='Cart'>
         <h1 id='Cart-title'>购物车，共{cartTotalCount}条</h1>
         <div className='Cart-line' />
@@ -195,7 +200,14 @@ export default function CartPage() {
                       }
                     }
                   >移除</button>
-                  <Checkbox onClick={e => e.stopPropagation()} />
+                  <Checkbox defaultChecked={checked[index]}
+                    onClick={
+                      e => {
+                        e.stopPropagation()
+                        onCheck(e.target.checked, index)
+                      }
+                    }
+                  />
                 </div>
                 <div className='Cart-line' />
               </li>
@@ -204,13 +216,19 @@ export default function CartPage() {
         </ul>
 
         <div id='Cart-pageShift-select'>
-          <Checkbox><font color='white' fontSize='15px'>全部全选</font></Checkbox>
+          <Checkbox onClick={e => {
+            alert("暂仅支持通过购物车右侧选择框选择")
+            e.target.checked = false
+          }}> <font color='white' fontSize='15px'>全部全选</font></Checkbox>
           <div id='Cart-pageShift'>
             <button className='Cart-pageShift-button' onClick={onLastPage}>上一页</button>
             <span id='Cart-pageShift-text'>第 {currPage} 页 / 共 {totalPage} 页</span>
             <button className='Cart-pageShift-button' onClick={onNextPage}>下一页</button>
           </div>
-          <Checkbox> <font color='white' fontSize='15px'>本页全选</font></Checkbox>
+          <Checkbox onClick={e => {
+            alert("暂仅支持通过购物车右侧选择框选择")
+            e.target.checked = false
+          }}> <font color='white' fontSize='15px'>本页全选</font></Checkbox>
         </div>
       </div>
 

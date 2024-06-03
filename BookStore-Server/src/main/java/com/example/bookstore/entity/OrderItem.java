@@ -39,4 +39,14 @@ public class OrderItem {
     json.put("number", number);
     return json;
   }
+
+  public JSONObject toJsonWithOrderMessage() {
+    JSONObject json = toJson();
+    json.put("username", order.getUser().getUsername());
+    json.put("receiver", order.getReceiver());
+    json.put("address", order.getAddress());
+    json.put("tel", order.getTel());
+    json.put("createdAt", order.getCreatedAt());
+    return json;
+  }
 }

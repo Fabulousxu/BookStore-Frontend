@@ -51,6 +51,7 @@ public class Order {
     json.put("address", address);
     json.put("tel", tel);
     json.put("createdAt", createdAt);
+    json.put("username", user.getUsername());
     JSONArray items = new JSONArray();
     for (OrderItem item : this.items) items.add(item.toJson());
     json.put("items", items);

@@ -61,9 +61,6 @@ export default function LoginPage() {
       login(loginId.current.value, loginPwd.current.value)
         .then(() => navigate('/home'))
         .catch(err => alert(err))
-      // login('xpg0399', 'xpg').then(() => {
-      //   navigate('/home')
-      // }).catch(err => alert(err))
     },
     onSignup = () => {
       if (signupId.current.value === '') {
