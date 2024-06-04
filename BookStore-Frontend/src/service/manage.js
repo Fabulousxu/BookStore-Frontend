@@ -86,3 +86,17 @@ export async function unsilenceUser(id) {
   let res = await post(`${apiURL}/manage/user/${id}/unsilence`)
   if (!res.ok) throw res.message
 }
+
+export async function uploadImage(file) {
+  const formData = new FormData()
+  formData.append('file', file)
+  let res = await fetch(`${apiURL}/upload/image`, {
+    method: 'POST',
+    body: formData,
+    credentials: 'include'
+  })
+  if (!res.ok) throw res.message
+  let json = await res.json()
+  if (!json.ok) throw res.message
+  return json.data.url
+}

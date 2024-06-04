@@ -5,7 +5,7 @@ import MenuBar from '../components/menu-bar'
 import '../css/manage.css'
 import { getBooks, searchBooks } from '../service/book'
 import { errorHandle } from '../service/util'
-import { addBook, delBook, getOrders, getUsers, searchOrders, searchUsers, setBook, setUser, silenceUser, unsilenceUser } from '../service/manage'
+import { addBook, delBook, getOrders, getUsers, searchOrders, searchUsers, setBook, setUser, silenceUser, unsilenceUser, uploadImage } from '../service/manage'
 
 let type = 'book', list = [], id
 
@@ -44,6 +44,7 @@ export default function ManagePage() {
     introInput = useRef(null),
     usernameInput = useRef(null),
     emailInput = useRef(null),
+    coverInput = useRef(null),
     onTitleInputKeyUp = e => {
       if (e.key === 'Enter' && titleInput.current.value !== '')
         authorInput.current.focus()
@@ -340,7 +341,6 @@ export default function ManagePage() {
         return
       }
       if (bookSubmit === '修改') {
-        alert(intro)
         setBook(id, title, author, isbn, cover, price, sales, repertory, intro)
           .then(() => {
             alert('修改成功')
@@ -375,7 +375,6 @@ export default function ManagePage() {
         emailInput.current.focus()
         return
       }
-
       setUser(id, username, email)
         .then(() => {
           alert('修改成功')
@@ -422,6 +421,11 @@ export default function ManagePage() {
             setUserList(res.list)
           }).catch(err => errorHandle(err, navigate))
         }).catch(err => errorHandle(err, navigate))
+    },
+    onUploadCover = () => {
+      uploadImage(coverInput.current.files[0])
+        .then(res => setCover(res))
+        .catch(err => errorHandle(err, navigate))
     }
 
   useEffect(() => {
@@ -583,7 +587,8 @@ export default function ManagePage() {
         <div className='Manage-modal' onClick={() => setShowBookModal(false)}>
           <div id='ManageBook-modal-content' onClick={e => e.stopPropagation()}>
             <div id='ManageBook-modal-flex1'>
-              <img id='ManageBook-modal-cover' src={cover} alt='点击上传封面图片' />
+              <input ref={coverInput} type="file" name="multipartfile" accept="image/*" onChange={onUploadCover} style={{ display: 'none' }} />
+              <img id='ManageBook-modal-cover' src={cover} alt='点击上传封面图片' onClick={() => { coverInput.current.click() }} />
               <div id='ManageBook-modal-flex2'>
                 <div className='Manage-modal-label-input'>
                   <div className='Manage-modal-label'>书名</div>
@@ -624,7 +629,6 @@ export default function ManagePage() {
                     onChange={event => setPrice(event.target.value)}
                     onKeyUp={onPriceInputKeyUp}
                   />
-
                 </div>
                 <div className='Manage-modal-label-input'>
                   <div className='Manage-modal-label'>销量</div>
@@ -651,9 +655,10 @@ export default function ManagePage() {
             <textarea
               ref={introInput}
               id='ManageBook-modal-intro'
+              value={intro}
               onChange={event => setIntro(event.target.value)}
               placeholder='书籍简介'
-            >{intro}</textarea>
+            />
             <div className='Manage-modal-operation'>
               <button className='Manage-modal-submit' onClick={onSetBookSubmit}>{bookSubmit}</button>
               <button className='Manage-modal-cancle' onClick={() => setShowBookModal(false)}>取消</button>
