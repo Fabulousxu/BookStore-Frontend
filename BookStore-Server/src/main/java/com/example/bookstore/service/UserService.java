@@ -1,12 +1,13 @@
 package com.example.bookstore.service;
 
 import com.alibaba.fastjson2.JSONObject;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface UserService {
-  JSONObject login(String username, String password, HttpSession session);
+  JSONObject login(String username, String password);
+
+  JSONObject register(String username, String email, String password);
 
   JSONObject searchUsers(String keyword, int pageIndex, int pageSize);
 

@@ -4,7 +4,7 @@
   align-items: center;
   position: relative;
   width: 90%;
-  margin: 120px auto 50px;
+  margin: 0px auto 50px;
   border-radius: 15px;
   backdrop-filter: blur(1.5px);
   background: linear-gradient(120deg, rgba(215, 127, 25, 0.628), rgba(11, 203, 50, 0.578));

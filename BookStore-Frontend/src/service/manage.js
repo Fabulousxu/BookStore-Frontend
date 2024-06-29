@@ -3,7 +3,7 @@ import { apiURL, post, get, put, del } from "./util"
 export async function searchUsers(keyword, pageIndex, pageSize) {
   let res = await get(`${apiURL}/manage/users?keyword=${keyword}&pageIndex=${pageIndex}&pageSize=${pageSize}`),
     userList = []
-  res.items.forEach((item, index) => {
+  res.items.forEach(item => {
     userList.push({
       id: item.id,
       username: item.username,
@@ -26,7 +26,7 @@ export async function getUsers(pageIndex, pageSize) {
 export async function searchOrders(keyword, pageIndex, pageSize) {
   let res = await get(`${apiURL}/manage/orders?keyword=${keyword}&pageIndex=${pageIndex}&pageSize=${pageSize}`),
     orderList = []
-  res.items.forEach((item, index) => {
+  res.items.forEach(item => {
     let datetime = new Date(item.createdAt),
       y = datetime.getFullYear(),
       m = datetime.getMonth() + 1,
@@ -37,7 +37,7 @@ export async function searchOrders(keyword, pageIndex, pageSize) {
       cover: item.book.cover,
       title: item.book.title,
       author: item.book.author,
-      price: item.book.price,
+      price: (item.book.price / 100).toFixed(2),
       username: item.username,
       receiver: item.receiver,
       tel: item.tel,

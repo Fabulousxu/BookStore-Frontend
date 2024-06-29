@@ -4,23 +4,25 @@ import com.alibaba.fastjson2.JSONObject;
 import jakarta.persistence.*;
 import java.util.List;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "user")
 @Setter
 @Getter
+@NoArgsConstructor
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long userId;
 
   private String username;
-  private String nickname;
+  private String nickname = "";
   private String email;
-  private long balance;
-  private Boolean admin;
-  private Boolean silence;
+  private long balance = 0;
+  private Boolean admin = false;
+  private Boolean silence = false;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderBy("createdAt DESC")
@@ -35,6 +37,11 @@ public class User {
 
   @ManyToMany(mappedBy = "likeUsers", cascade = CascadeType.ALL)
   private List<Comment> likeComments;
+
+  public User(String username, String email) {
+    this.username = username;
+    this.email = email;
+  }
 
   public JSONObject toJson() {
     JSONObject json = new JSONObject();

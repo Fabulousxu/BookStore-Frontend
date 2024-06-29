@@ -11,7 +11,7 @@ export async function getCart() {
       cover: book.cover,
       title: book.title,
       author: book.author,
-      price: book.price,
+      price: (book.price / 100).toFixed(2),
       number: item.number
     })
   })

@@ -52,10 +52,10 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  height: 370px;
-  width: 270px;
-  top: calc(50% - 225px);
-  left: calc(80% - 175px);
+  height: 400px;
+  width: 300px;
+  top: calc(50% - 240px);
+  left: calc(75% - 150px);
   background-color: rgba(168, 101, 152, 0.313);
   border-radius: 15px;
   box-shadow: -6px 6px 8px 3px rgb(16, 16, 16);
@@ -73,7 +73,7 @@
   }
 
   to {
-    left: calc(80% - 175px);
+    left: calc(75% - 150px);
   }
 }
 
@@ -82,7 +82,7 @@
 }
 
 .login-in {
-  top: calc(50% - 225px);
+  top: calc(50% - 240px);
   animation: login-in 0.8s;
 }
 
@@ -92,7 +92,7 @@
   }
 
   to {
-    top: calc(50% - 225px);
+    top: calc(50% - 240px);
   }
 }
 
@@ -103,7 +103,7 @@
 
 @keyframes login-out {
   from {
-    top: calc(50% - 225px);
+    top: calc(50% - 240px);
   }
 
   to {
@@ -112,7 +112,7 @@
 }
 
 .signup-in {
-  top: calc(50% - 225px);
+  top: calc(50% - 240px);
   animation: signup-in 0.8s;
 }
 
@@ -122,7 +122,7 @@
   }
 
   to {
-    top: calc(50% - 225px);
+    top: calc(50% - 240px);
   }
 }
 
@@ -133,7 +133,7 @@
 
 @keyframes signup-out {
   from {
-    top: calc(50% - 225px);
+    top: calc(50% - 240px);
   }
 
   to {

@@ -1,11 +1,23 @@
-import { useRef, useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Checkbox } from "antd"
+import {useRef, useState, useEffect} from 'react'
+import {useNavigate} from 'react-router-dom'
+import {Checkbox} from "antd"
 import MenuBar from '../components/menu-bar'
 import '../css/manage.css'
-import { getBooks, searchBooks } from '../service/book'
-import { errorHandle } from '../service/util'
-import { addBook, delBook, getOrders, getUsers, searchOrders, searchUsers, setBook, setUser, silenceUser, unsilenceUser, uploadImage } from '../service/manage'
+import {getBooks, searchBooks} from '../service/book'
+import {errorHandle} from '../service/util'
+import {
+  addBook,
+  delBook,
+  getOrders,
+  getUsers,
+  searchOrders,
+  searchUsers,
+  setBook,
+  setUser,
+  silenceUser,
+  unsilenceUser,
+  uploadImage
+} from '../service/manage'
 
 let type = 'book', list = [], id
 
@@ -114,7 +126,7 @@ export default function ManagePage() {
       bookManage.current.className = 'ManageType-button'
       userManage.current.className = 'ManageType-button'
       orderManage.current.className = 'ManageType-button ManageType-button-select'
-      setPlaceholder('请输入订单号、用户名、下单时间、书籍信息等关键词搜索相关订单')
+      setPlaceholder('请输入用户名、订单信息、下单时间、书籍信息等关键词搜索相关订单')
       setKeyword('')
       type = 'order'
       setListName('站内订单')
@@ -126,7 +138,15 @@ export default function ManagePage() {
         setOrderList(res.list)
       }).catch(err => errorHandle(err, navigate))
     },
-    setBookList = (list = [{ cover: '', title: '-', author: '-', price: '', isbn: '', sales: 0, repertory: 0 }]) => {
+    setBookList = (list = [{
+      cover: '',
+      title: '-',
+      author: '-',
+      price: '',
+      isbn: '',
+      sales: 0,
+      repertory: 0
+    }]) => {
       bookList.current.style.display = 'flex'
       userList.current.style.display = 'none'
       orderList.current.style.display = 'none'
@@ -149,7 +169,7 @@ export default function ManagePage() {
         }
       })
     },
-    setUserList = (list = [{ username: '-', email: '-', silence: false }]) => {
+    setUserList = (list = [{username: '-', email: '-', silence: false}]) => {
       bookList.current.style.display = 'none'
       userList.current.style.display = 'flex'
       orderList.current.style.display = 'none'
@@ -167,7 +187,18 @@ export default function ManagePage() {
         }
       })
     },
-    setOrderList = (list = [{ cover: '-', title: '-', author: '-', price: '', receiver: '-', tel: '', address: '-', username: '', time: '-', number: '-' }]) => {
+    setOrderList = (list = [{
+      cover: '-',
+      title: '-',
+      author: '-',
+      price: '',
+      receiver: '-',
+      tel: '',
+      address: '-',
+      username: '',
+      time: '-',
+      number: '-'
+    }]) => {
       bookList.current.style.display = 'none'
       userList.current.style.display = 'none'
       orderList.current.style.display = 'flex'
@@ -214,12 +245,12 @@ export default function ManagePage() {
         }).catch(err => errorHandle(err, navigate))
       } else if (type === 'order') {
         searchOrders(keyword, 0, 10).then(res => {
-          list = res.list
-          setTotalCount(res.totalNumber)
-          setTotalPage(res.totalPage)
-          setCurrPage(1)
-          setOrderList(res.list)
-        }
+            list = res.list
+            setTotalCount(res.totalNumber)
+            setTotalPage(res.totalPage)
+            setCurrPage(1)
+            setOrderList(res.list)
+          }
         ).catch(err => errorHandle(err, navigate))
       }
     },
@@ -341,7 +372,7 @@ export default function ManagePage() {
         return
       }
       if (bookSubmit === '修改') {
-        setBook(id, title, author, isbn, cover, price, sales, repertory, intro)
+        setBook(id, title, author, isbn, cover, parseInt(price * 100), sales, repertory, intro)
           .then(() => {
             alert('修改成功')
             setShowBookModal(false)
@@ -353,7 +384,7 @@ export default function ManagePage() {
             }).catch(err => errorHandle(err, navigate))
           }).catch(err => errorHandle(err, navigate))
       } else if (bookSubmit === '上传') {
-        addBook(title, author, isbn, cover, price, sales, repertory, intro)
+        addBook(title, author, isbn, cover, parseInt(price * 100), sales, repertory, intro)
           .then(() => {
             alert('上传成功')
             setShowBookModal(false)
@@ -440,15 +471,18 @@ export default function ManagePage() {
 
   return (
     <div>
-      <MenuBar index={4} />
+      <MenuBar index={4}/>
       <div id='Manage'>
         <div id='ManageType'>
           <button
             ref={bookManage}
             className='ManageType-button ManageType-button-select'
-            onClick={onManageBook}>书籍管理</button>
-          <button ref={userManage} className='ManageType-button' onClick={onManageUser}>用户管理</button>
-          <button ref={orderManage} className='ManageType-button' onClick={onManageOrder}>订单管理</button>
+            onClick={onManageBook}>书籍管理
+          </button>
+          <button ref={userManage} className='ManageType-button' onClick={onManageUser}>用户管理
+          </button>
+          <button ref={orderManage} className='ManageType-button' onClick={onManageOrder}>订单管理
+          </button>
         </div>
         <div id='ManageDisplay'>
           <div id='Manage-SearchBar'>
@@ -467,20 +501,21 @@ export default function ManagePage() {
             <button id='Manage-SearchBar-submit'></button>
           </div>
           <h1 id='ManageList-title'>{listName}，共{totalCount}条</h1>
-          <div className='Manage-line' />
+          <div className='Manage-line'/>
           {
             type === 'book' &&
             <div id='Manage-addBook'>
               <button id='Manage-addBook-button' onClick={onAddBook}>+ 上传书籍</button>
-              <div className='Manage-line' />
+              <div className='Manage-line'/>
             </div>
           }
           <ul ref={bookList} id='Manage-ul'>
             {
               [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) =>
-                <li key={index} className='Manage-li' onClick={() => navigate(`/book?id=${list[index].id}`)}>
+                <li key={index} className='Manage-li'
+                    onClick={() => navigate(`/book?id=${list[index].id}`)}>
                   <div className='ManageBook-bookInfo'>
-                    <img className='ManageBook-cover' src='' alt='' />
+                    <img className='ManageBook-cover' src='' alt=''/>
                     <div className='ManageBook-li-flex1'>
                       <span className='ManageBook-title'>-</span>
                       <span className='ManageBook-author'>-</span>
@@ -499,7 +534,8 @@ export default function ManagePage() {
                           onSetBook(index)
                         }
                       }
-                    >修改信息</button>
+                    >修改信息
+                    </button>
                     <button
                       className='ManageBook-remove'
                       onClick={
@@ -508,10 +544,11 @@ export default function ManagePage() {
                           onRemoveBook(index)
                         }
                       }
-                    >删除书籍</button>
-                    <Checkbox onClick={e => e.stopPropagation()} />
+                    >删除书籍
+                    </button>
+                    <Checkbox onClick={e => e.stopPropagation()}/>
                   </div>
-                  <div className='Manage-line' />
+                  <div className='Manage-line'/>
                 </li>
               )
             }
@@ -523,12 +560,18 @@ export default function ManagePage() {
                   <div className='ManageUser-userInfo'>
                     <span className='ManageUser-username'>-</span>
                     <span className='ManageUser-email'>-</span>
-                    <button className='ManageUser-setting' onClick={() => onSetUser(index)}>修改信息</button>
-                    <button className='ManageUser-silence' onClick={() => onSilenceUser(index)}>禁用</button>
-                    <button className='ManageUser-remove' onClick={() => alert('暂不支持注销用户！')}>注销</button>
-                    <Checkbox />
+                    <button className='ManageUser-setting'
+                            onClick={() => onSetUser(index)}>修改信息
+                    </button>
+                    <button className='ManageUser-silence'
+                            onClick={() => onSilenceUser(index)}>禁用
+                    </button>
+                    <button className='ManageUser-remove'
+                            onClick={() => alert('暂不支持注销用户！')}>注销
+                    </button>
+                    <Checkbox/>
                   </div>
-                  <div className='Manage-line' />
+                  <div className='Manage-line'/>
                 </li>
               )
             }
@@ -536,9 +579,10 @@ export default function ManagePage() {
           <ul ref={orderList} id='Manage-ul'>
             {
               [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) =>
-                <li key={index} className='Manage-li' onClick={() => navigate(`/book?id=${list[index].id}`)}>
+                <li key={index} className='Manage-li'
+                    onClick={() => navigate(`/book?id=${list[index].id}`)}>
                   <div className='ManageOrder-info'>
-                    <img className='ManageOrder-cover' src='' alt='book-image' />
+                    <img className='ManageOrder-cover' src='' alt='book-image'/>
                     <div className='ManageOrder-li-flex1'>
                       <span className='ManageOrder-title'>-</span>
                       <span className='ManageOrder-author'>-</span>
@@ -563,10 +607,11 @@ export default function ManagePage() {
                           alert('暂不支持删除订单！')
                         }
                       }
-                    >删除记录</button>
-                    <Checkbox onClick={e => e.stopPropagation()} />
+                    >删除记录
+                    </button>
+                    <Checkbox onClick={e => e.stopPropagation()}/>
                   </div>
-                  <div className='Order-line' />
+                  <div className='Order-line'/>
                 </li>
               )
             }
@@ -587,8 +632,11 @@ export default function ManagePage() {
         <div className='Manage-modal' onClick={() => setShowBookModal(false)}>
           <div id='ManageBook-modal-content' onClick={e => e.stopPropagation()}>
             <div id='ManageBook-modal-flex1'>
-              <input ref={coverInput} type="file" name="multipartfile" accept="image/*" onChange={onUploadCover} style={{ display: 'none' }} />
-              <img id='ManageBook-modal-cover' src={cover} alt='点击上传封面图片' onClick={() => { coverInput.current.click() }} />
+              <input ref={coverInput} type="file" name="multipartfile" accept="image/*"
+                     onChange={onUploadCover} style={{display: 'none'}}/>
+              <img id='ManageBook-modal-cover' src={cover} alt='点击上传封面图片' onClick={() => {
+                coverInput.current.click()
+              }}/>
               <div id='ManageBook-modal-flex2'>
                 <div className='Manage-modal-label-input'>
                   <div className='Manage-modal-label'>书名</div>
@@ -660,8 +708,10 @@ export default function ManagePage() {
               placeholder='书籍简介'
             />
             <div className='Manage-modal-operation'>
-              <button className='Manage-modal-submit' onClick={onSetBookSubmit}>{bookSubmit}</button>
-              <button className='Manage-modal-cancle' onClick={() => setShowBookModal(false)}>取消</button>
+              <button className='Manage-modal-submit'
+                      onClick={onSetBookSubmit}>{bookSubmit}</button>
+              <button className='Manage-modal-cancle' onClick={() => setShowBookModal(false)}>取消
+              </button>
             </div>
           </div>
         </div>
@@ -694,7 +744,8 @@ export default function ManagePage() {
             </div>
             <div className='Manage-modal-operation'>
               <button className='Manage-modal-submit' onClick={onSetUserSubmit}>修改</button>
-              <button className='Manage-modal-cancle' onClick={() => setShowUserModal(false)}>取消</button>
+              <button className='Manage-modal-cancle' onClick={() => setShowUserModal(false)}>取消
+              </button>
             </div>
           </div>
         </div>

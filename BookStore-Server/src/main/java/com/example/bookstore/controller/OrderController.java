@@ -15,14 +15,8 @@ public class OrderController {
   @Autowired private OrderService orderService;
 
   @GetMapping
-  public JSONArray getOrder(@SessionAttribute("id") long id) {
-    return orderService.getOrder(id);
-  }
-
-  @GetMapping("/search")
-  public JSONArray searchOrderItems(
-      @SessionAttribute("id") long id, String keyword, int pageIndex, int pageSize) {
-    return orderService.searchOrderItems(id, keyword, pageIndex, pageSize);
+  public JSONArray getOrderItems(@SessionAttribute("id") long id, String keyword) {
+    return orderService.getOrderItems(id, keyword);
   }
 
   @PostMapping

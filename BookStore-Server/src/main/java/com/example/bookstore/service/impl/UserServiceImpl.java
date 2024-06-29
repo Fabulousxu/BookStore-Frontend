@@ -3,6 +3,7 @@ package com.example.bookstore.service.impl;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.example.bookstore.entity.User;
+import com.example.bookstore.entity.UserAuth;
 import com.example.bookstore.repository.UserAuthRepository;
 import com.example.bookstore.repository.UserRepository;
 import com.example.bookstore.service.UserService;
@@ -17,9 +18,10 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
   @Autowired private UserRepository userRepository;
   @Autowired private UserAuthRepository userAuthRepository;
+  @Autowired private HttpSession session;
 
   @Override
-  public JSONObject login(String username, String password, HttpSession session) {
+  public JSONObject login(String username, String password) {
     User user = userRepository.findByUsername(username);
     if (user == null) return Util.errorResponseJson("用户不存在");
     if (!userAuthRepository.existsByUser_UsernameAndPassword(username, password))
@@ -30,6 +32,15 @@ public class UserServiceImpl implements UserService {
     data.put("admin", user.getAdmin());
     res.put("data", data);
     return res;
+  }
+
+  @Override
+  public JSONObject register(String username, String email, String password) {
+    if (userRepository.existsByUsername(username)) return Util.errorResponseJson("用户已存在");
+    User user = new User(username, email);
+    userRepository.save(user);
+    userAuthRepository.save(new UserAuth(user, password));
+    return Util.successResponseJson("注册成功");
   }
 
   @Override

@@ -4,6 +4,7 @@ import MenuBar from '../components/menu-bar'
 import '../css/order.css'
 import { getOrder } from '../service/order'
 import { errorHandle } from '../service/util'
+import SearchBar from '../components/search-bar'
 
 let order = []
 
@@ -11,6 +12,7 @@ export default function OrderPage() {
   const [currPage, setCurrPage] = useState(1),
     [totalPage, setTotalPage] = useState(1),
     [orderTotalCount, setOrderTotalCount] = useState(1),
+    [keyword, setKeyword] = useState(''),
     orderList = useRef(null),
     navigate = useNavigate(),
     setOrderList = (list = [{ cover: '-', title: '-', author: '-', price: '', receiver: '-', tel: '-', address: '-', time: '-', number: '-' }]) => {
@@ -50,10 +52,19 @@ export default function OrderPage() {
     onBookInfo = index => {
       let item = order[(currPage - 1) * 10 + index]
       navigate(`/book?id=${item.id}`)
+    },
+    onSearch = e => {
+      setKeyword(e.target.value)
+      getOrder(e.target.value).then(list => {
+        order = list
+        setOrderTotalCount(list.length)
+        setTotalPage(Math.ceil(list.length / 10))
+        setOrderList(list.slice(0, 10))
+      }).catch(err => errorHandle(err, navigate))
     }
 
   useEffect(() => {
-    getOrder().then(list => {
+    getOrder('').then(list => {
       order = list
       setOrderTotalCount(list.length)
       setTotalPage(Math.ceil(list.length / 10))
@@ -64,6 +75,7 @@ export default function OrderPage() {
   return (
     <div>
       <MenuBar index={1} />
+      <SearchBar placeholder='请输入订单信息、下单时间、书籍信息等关键词搜索相关订单' keyword={keyword} onChange={onSearch} />
       <div id='Order'>
         <h1 id='Order-title'>全部订单，共{orderTotalCount}条</h1>
         <div className='Order-line' />

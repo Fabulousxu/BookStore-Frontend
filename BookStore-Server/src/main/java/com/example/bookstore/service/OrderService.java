@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface OrderService {
-  JSONArray getOrder(long userId);
-
-  JSONArray searchOrderItems(long userId, String keyword, int pageIndex, int pageSize);
+  JSONArray getOrderItems(long userId, String keyword);
 
   JSONObject placeOrder(
       List<Long> cartItemIds, long userId, String receiver, String address, String tel);
