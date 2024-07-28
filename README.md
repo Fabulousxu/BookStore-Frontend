@@ -1,3 +1,13 @@
+# BookStore-Frontend
+ 星空书店（前端工程）
+
+## 项目简介
+ 该项目是一个线上书店，是上海交通大学软件工程专业2024春《互联网应用开发技术》课程大作业。该项目为前端工程，基于react开发，采用了ant-design的ui库。
+
+## 环境依赖
+ node版本：21.6.2
+ npm版本：10.2.4
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
