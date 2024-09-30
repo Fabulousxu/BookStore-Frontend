@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import '../css/menu-bar.css'
 import cartImg from '../images/cart.png'
 import accountImg from '../images/account.png'
+import {logout} from "../service/login";
 
 export let mode, setMode = m => mode = m
 
@@ -14,7 +15,7 @@ export default function MenuBar(props) {
     { text: "管理", url: "/manage" }
   ]
   const navigate = useNavigate()
-  let username = 'xupeigong'
+  let username = '用户'
 
   return (
     <div id='MenuBar'>
@@ -46,6 +47,19 @@ export default function MenuBar(props) {
           <img id='MenuBar-account-image' src={accountImg} alt='账户' />
           <span id="MenuBar-username">{username}</span>
         </li>
+        <li
+          key={menuList.length + 2}
+          id="MenuBar-logout"
+          className="MenuBar-menuList"
+          style={{fontSize: '14px',}}
+          onClick={() => {
+            setMode(null)
+            logout().then(res => {
+              alert('登录时长：' + res)
+              navigate('/login')
+            }).catch(e => alert(e))
+          }}
+        >退出登录</li>
       </ul>
 
     </div>

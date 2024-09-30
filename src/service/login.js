@@ -11,3 +11,9 @@ export async function signup(username, email, password) {
   let res = await post(`${apiURL}/register`, { username, email, password })
   if (!res.ok) throw res.message
 }
+
+export async function logout() {
+  let res = await post(`${apiURL}/logout`)
+  if (!res.ok) throw res.message
+  return res.data.time;
+}
