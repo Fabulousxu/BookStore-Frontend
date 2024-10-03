@@ -118,7 +118,7 @@ export default function CartPage() {
         .then(() => {
           setShowModal(false)
           itemIds = []
-          alert('下单成功')
+          alert('订单处理中')
           navigate('/order')
         }).catch(err => errorHandle(err, navigate))
     },
