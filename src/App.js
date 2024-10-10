@@ -9,8 +9,11 @@ import AccountPage from './pages/account'
 import BookPage from './pages/book'
 import MenuBar from './components/menu-bar'
 import ManagePage from './pages/manage'
+import {useState} from "react";
 
 export default function App() {
+  let [ws, setWs] = useState(null)
+
   return (
     <div>
       <Background />
@@ -21,7 +24,7 @@ export default function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path='/order' element={<OrderPage />} />
           <Route path='/stat' element={<StatPage />} />
-          <Route path='/cart' element={<CartPage />} />
+          <Route path='/cart' element={<CartPage ws={ws} setWs={setWs} />} />
           <Route path='/sky' element={<MenuBar index={3} />} />
           <Route path='/manage' element={<ManagePage />} />
           <Route path='/account' element={<AccountPage />} />

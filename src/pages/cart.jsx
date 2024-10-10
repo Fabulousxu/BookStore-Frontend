@@ -9,7 +9,7 @@ import { errorHandle } from '../service/util'
 
 let cart = [], itemIds = [], isSingleBuy, itemId = []
 
-export default function CartPage() {
+export default function CartPage(props) {
   const [currPage, setCurrPage] = useState(1),
     [totalPage, setTotalPage] = useState(1),
     [cartTotalCount, setCartTotalCount] = useState(1),
@@ -20,6 +20,7 @@ export default function CartPage() {
     telInput = useRef(null),
     addressInput = useRef(null),
     navigate = useNavigate(),
+    {ws, setWs} = props,
     setCartList = (list = [{ cover: '', title: '-', author: '-', price: '', number: 1 }]) => {
       let lis = cartList.current.children
       for (let li of lis) li.style.visibility = 'hidden'
@@ -115,11 +116,34 @@ export default function CartPage() {
         return
       }
       placeOrder(receiver, tel, address, isSingleBuy ? itemId : itemIds)
-        .then(() => {
+        .then(res => {
           setShowModal(false)
           itemIds = []
+
+          if (!res.ws) {
+            alert('下单成功')
+            navigate('/order')
+            return
+          }
+
+          let socket = new WebSocket(`ws://localhost:8080/placeOrder/${res.id}`)
+          socket.onopen = () => {
+            console.log('websocket open')
+          }
+          socket.onclose = () => {
+            console.log('websocket close')
+          }
+          socket.onmessage = e => {
+            console.log('websocket receive message: ', e.data)
+            let res = JSON.parse(e.data)
+            socket.close()
+            if (res.ok) {
+              alert('下单成功')
+              navigate('/order')
+            } else alert('下单失败')
+          }
+          setWs(socket)
           alert('订单处理中')
-          navigate('/order')
         }).catch(err => errorHandle(err, navigate))
     },
     onBookInfo = idx => {

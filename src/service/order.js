@@ -27,6 +27,6 @@ export async function getOrder(keyword) {
 
 export async function placeOrder(receiver, tel, address, itemIds) {
   let res = await post(`${apiURL}/order`, { receiver, tel, address, itemIds })
-  if (res.ok) return
+  if (res.ok) return res
   else throw res.message
 }
