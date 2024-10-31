@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import MenuBar from '../components/menu-bar'
 import SearchBar from '../components/search-bar'
 import '../css/home.css'
-import { getBooks, searchBooks } from '../service/book'
+import {getAuthor, getBooks, searchBooks} from '../service/book'
 import { errorHandle } from '../service/util'
 
 export default function HomePage() {
@@ -73,12 +73,24 @@ export default function HomePage() {
       }).catch(err => errorHandle(err, navigate))
     },
     onSearch = e => {
-      setKeyword(e.target.value)
-      searchBooks(e.target.value, 0, 30).then(res => {
+      let content = e.target.value
+      setKeyword(content)
+      content = content.trim()
+      if (content.substring(0, 10) === 'author of:') content = content.substring(10).trim()
+      searchBooks(content, 0, 30).then(res => {
         setTotalPage(res.totalPage)
         setCurrPage(1)
         setBookList(res.list)
       }).catch(err => errorHandle(err, navigate))
+    },
+    onEnter = () => {
+      let content = keyword.trim()
+      if (content.substring(0, 10) === 'author of:') {
+        content = content.substring(10).trim()
+        getAuthor(content).then(res => {
+          alert(`《${content}》的作者是：${res.author}`)
+        }).catch(err => errorHandle(err, navigate))
+      }
     }
 
 
@@ -94,7 +106,7 @@ export default function HomePage() {
   return (
     <div>
       <MenuBar index={0} />
-      <SearchBar placeholder='请输入书籍名、作者名等关键词搜索相关书籍' keyword={keyword} onChange={onSearch} />
+      <SearchBar placeholder='请输入书籍名、作者名等关键词搜索相关书籍' keyword={keyword} onChange={onSearch} onEnter={onEnter}/>
       <div id='BookDisplay'>
         <ul ref={category} id='BookDisplay-category'>
           {

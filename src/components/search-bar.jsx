@@ -9,8 +9,9 @@ export default function SearchBar(props) {
         value={props.keyword}
         placeholder={props.placeholder}
         onChange={props.onChange}
+        onKeyPress={e => { if (e.key === 'Enter') props?.onEnter() }}
       />
-      <button className='SearchBar-submit' />
+      <button className='SearchBar-submit' onClick={props?.onEnter}/>
     </div>
   )
 }

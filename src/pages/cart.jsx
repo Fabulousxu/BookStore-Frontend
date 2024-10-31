@@ -5,7 +5,7 @@ import MenuBar from '../components/menu-bar'
 import { getCart, removeFromCart, setCartItemNumber } from '../service/cart'
 import { placeOrder } from '../service/order'
 import '../css/cart.css'
-import { errorHandle } from '../service/util'
+import {errorHandle, wsURL} from '../service/util'
 
 let cart = [], itemIds = [], isSingleBuy, itemId = []
 
@@ -126,7 +126,7 @@ export default function CartPage(props) {
             return
           }
 
-          let socket = new WebSocket(`ws://localhost:8080/placeOrder/${res.id}`)
+          let socket = new WebSocket(`${wsURL}/placeOrder/${res.id}`)
           socket.onopen = () => {
             console.log('websocket open')
           }

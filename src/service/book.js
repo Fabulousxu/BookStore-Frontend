@@ -1,4 +1,4 @@
-import { apiURL, post, get } from "./util"
+import {apiURL, post, get, gatewayURL} from "./util"
 
 export async function searchBooks(keyword, pageIndex, pageSize) {
   let res = await get(`${apiURL}/books?keyword=${keyword}&pageIndex=${pageIndex}&pageSize=${pageSize}`),
@@ -71,4 +71,11 @@ export async function getBookComments(id, pageIndex, pageSize, sort) {
 export async function comment(id, content) {
   let res = await post(`${apiURL}/book/${id}/comments`, { content })
   if (!res.ok) throw res.message
+  return res
+}
+
+export async function getAuthor(title) {
+  let res = await get(`${gatewayURL}/book/${title}/author`)
+  if (!res.ok) throw res.message
+  return res
 }
