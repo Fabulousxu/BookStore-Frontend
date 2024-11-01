@@ -1,4 +1,4 @@
-import { apiURL, post, get, put, del } from './util'
+import {apiURL, post, get, put, del, functionURL} from './util'
 
 export async function getCart() {
   let res = await get(`${apiURL}/cart`),
@@ -31,4 +31,21 @@ export async function setCartItemNumber(itemId, number) {
 export async function removeFromCart(itemId) {
   let res = await del(`${apiURL}/cart/${itemId}`)
   if (!res.ok) throw res.message
+}
+
+export async function calSingleTotalPrice(price, number) {
+  let res = await fetch(`${functionURL}/calSingleTotalPrice`, {
+    method: 'POST',
+    body: `${price * 100}, ${number}`
+  })
+  let array = await res.json()
+  return array[0] / 100;
+}
+
+export async function calAllTotalPrice(priceList) {
+  let res = await fetch(`${functionURL}/calAllTotalPrice`, {
+    method: 'POST',
+    body: priceList.map(price => price * 100).join(',')
+  })
+  return res.json()[0] / 100
 }

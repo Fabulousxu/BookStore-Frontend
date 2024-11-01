@@ -137,6 +137,13 @@
   cursor: pointer;
 }
 
+.Cart-count-total-price {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+}
+
 .Cart-count {
   display: flex;
   align-items: center;
@@ -163,6 +170,13 @@
 .Cart-count-value {
   margin: 0 10px;
   color: white;
+  font: 20px 微软雅黑;
+}
+
+.Cart-total-price {
+  margin-top: 20px;
+  text-align: center;
+  color: red;
   font: 20px 微软雅黑;
 }
 
@@ -292,7 +306,7 @@
 
 .Cart-modal-input {
   width: 80%;
-  margin: 10px auto 25px;
+  margin: 8px auto 18px;
   padding: 10px;
   box-sizing: border-box;
   border: 2px solid rgb(28, 21, 54);
@@ -355,4 +369,10 @@
 #Cart-modal-cancle:active {
   transform: scale(0.97);
   cursor: pointer;
+}
+
+#Cart-modal-intro {
+  color: red;
+  font-size: 17px;
+  margin-bottom: 18px;
 }

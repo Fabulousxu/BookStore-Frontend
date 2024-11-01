@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Checkbox } from "antd"
 import MenuBar from '../components/menu-bar'
-import { getCart, removeFromCart, setCartItemNumber } from '../service/cart'
+import {calSingleTotalPrice, getCart, removeFromCart, setCartItemNumber} from '../service/cart'
 import { placeOrder } from '../service/order'
 import '../css/cart.css'
 import {errorHandle, wsURL} from '../service/util'
@@ -21,6 +21,11 @@ export default function CartPage(props) {
     addressInput = useRef(null),
     navigate = useNavigate(),
     {ws, setWs} = props,
+    [allTotalPrice, setAllTotalPrice] = useState(0),
+    [allTotalNumber, setAllTotalNumber] = useState(0),
+    [allTotalBook, setAllTotalBook] = useState(0),
+    [singleTotalPrice, setSingleTotalPrice] = useState(0),
+    [singleTotalNumber, setSingleTotalNumber] = useState(0),
     setCartList = (list = [{ cover: '', title: '-', author: '-', price: '', number: 1 }]) => {
       let lis = cartList.current.children
       for (let li of lis) li.style.visibility = 'hidden'
@@ -34,7 +39,12 @@ export default function CartPage(props) {
           info1[0].innerHTML = item.title
           info1[1].innerHTML = item.author
           info1[2].innerHTML = '¥' + item.price
-          info[2].children[1].innerHTML = item.number
+          info[2].children[0].children[1].innerHTML = item.number
+          calSingleTotalPrice(item.price, item.number).then(res => {
+            info[2].children[1].innerHTML = '¥' + res.toFixed(2)
+          }).catch(err => {
+            info[2].children[1].innerHTML = '¥' + (item.price * item.number).toFixed(2)
+          })
         }
       })
     },
@@ -69,6 +79,9 @@ export default function CartPage(props) {
       let book = cart[(currPage - 1) * 10 + idx]
       isSingleBuy = true
       itemId = [book.itemId]
+      setSingleTotalNumber(book.number)
+      calSingleTotalPrice(book.price, book.number).then(res => setSingleTotalPrice(res)
+      ).catch(err => setSingleTotalPrice((book.price * book.number).toFixed(2)))
       setShowModal(true)
     },
     onSingleRemove = idx => {
@@ -151,8 +164,21 @@ export default function CartPage(props) {
       navigate(`/book?id=${book.id}`)
     },
     onCheck = (flag, idx) => {
-      if (flag) itemIds.push(cart[(currPage - 1) * 10 + idx].itemId)
-      else itemIds = itemIds.filter(id => id !== cart[(currPage - 1) * 10 + idx].itemId)
+      let price = cart[(currPage - 1) * 10 + idx].price,
+        number = cart[(currPage - 1) * 10 + idx].number
+      if (flag) {
+        itemIds.push(cart[(currPage - 1) * 10 + idx].itemId)
+        setAllTotalBook(value => value + 1)
+        setAllTotalNumber(value => value + number)
+        calSingleTotalPrice(price, number).then(res => setAllTotalPrice(value => value + res)
+        ).catch(err => setAllTotalPrice(value => value + price * number))
+      } else {
+        itemIds = itemIds.filter(id => id !== cart[(currPage - 1) * 10 + idx].itemId)
+        setAllTotalBook(value => value - 1)
+        setAllTotalNumber(value => value - number)
+        calSingleTotalPrice(price, number).then(res => setAllTotalPrice(value => value - res)
+        ).catch(err => setAllTotalPrice(value => value - price * number))
+      }
       let newChecked = checked
       newChecked[idx] = flag
       setChecked(newChecked)
@@ -185,26 +211,31 @@ export default function CartPage(props) {
                     <span className='Cart-author'>-</span>
                     <div className='Cart-price'>¥</div>
                   </div>
-                  <div className='Cart-count'>
-                    <button
-                      className='Cart-count-button'
-                      onClick={
-                        e => {
-                          e.stopPropagation()
-                          onNumberDec(index)
+                  <div className='Cart-count-total-price'>
+                    <div className='Cart-count'>
+                      <button
+                        className='Cart-count-button'
+                        onClick={
+                          e => {
+                            e.stopPropagation()
+                            onNumberDec(index)
+                          }
                         }
-                      }
-                    >-</button>
-                    <div className='Cart-count-value'>1</div>
-                    <button
-                      className='Cart-count-button'
-                      onClick={
-                        e => {
-                          e.stopPropagation()
-                          onNumberAdd(index)
+                      >-
+                      </button>
+                      <div className='Cart-count-value'>1</div>
+                      <button
+                        className='Cart-count-button'
+                        onClick={
+                          e => {
+                            e.stopPropagation()
+                            onNumberAdd(index)
+                          }
                         }
-                      }
-                    >+</button>
+                      >+
+                      </button>
+                    </div>
+                    <div className='Cart-total-price'>¥</div>
                   </div>
                   <button
                     className='Cart-buynow'
@@ -264,6 +295,7 @@ export default function CartPage(props) {
         showModal &&
         <div id='Cart-modal' onClick={() => setShowModal(false)}>
           <div id='Cart-modal-content' onClick={e => e.stopPropagation()}>
+            <div id='Cart-modal-intro'>共{isSingleBuy ? 1 : allTotalBook}本书，总计{isSingleBuy ? singleTotalNumber : allTotalNumber}件，总价¥{isSingleBuy ? singleTotalPrice : allTotalPrice}</div>
             <div className='Cart-modal-label'>收货人姓名</div>
             <input ref={receiverInput} className='Cart-modal-input' onKeyUp={onReceiverInputKeyUp} />
             <div className='Cart-modal-label'>收货人电话</div>

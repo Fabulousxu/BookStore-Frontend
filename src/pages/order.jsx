@@ -5,6 +5,7 @@ import '../css/order.css'
 import { getOrder } from '../service/order'
 import { errorHandle } from '../service/util'
 import SearchBar from '../components/search-bar'
+import {calSingleTotalPrice} from "../service/cart";
 
 let order = []
 
@@ -35,7 +36,11 @@ export default function OrderPage() {
           info2[2].innerHTML = item.address
           info3[0].innerHTML = item.time
           info3[1].innerHTML = '共' + item.number + '件'
-          info3[2].innerHTML = '¥' + item.price * item.number
+          calSingleTotalPrice(item.price, item.number).then(res => {
+            info3[2].innerHTML = '¥' + res.toFixed(2)
+          }).catch(err => {
+            info3[2].innerHTML = '¥' + (item.price * item.number).toFixed(2)
+          })
         }
       })
     },
