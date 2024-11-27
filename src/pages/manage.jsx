@@ -15,8 +15,7 @@ import {
   setBook,
   setUser,
   silenceUser,
-  unsilenceUser,
-  uploadImage
+  unsilenceUser
 } from '../service/manage'
 
 let type = 'book', list = [], id
@@ -370,6 +369,9 @@ export default function ManagePage() {
       } else if (intro === '') {
         introInput.current.focus()
         return
+      } else if (cover === '') {
+        alert('请上传封面图片!')
+        return
       }
       if (bookSubmit === '修改') {
         setBook(id, title, author, isbn, cover, parseInt(price * 100), sales, repertory, intro)
@@ -454,9 +456,10 @@ export default function ManagePage() {
         }).catch(err => errorHandle(err, navigate))
     },
     onUploadCover = () => {
-      uploadImage(coverInput.current.files[0])
-        .then(res => setCover(res))
-        .catch(err => errorHandle(err, navigate))
+      let file = coverInput.current.files[0]
+      const reader = new FileReader()
+      reader.onload = e => { setCover(e.target.result) }
+      reader.readAsDataURL(file)
     }
 
   useEffect(() => {

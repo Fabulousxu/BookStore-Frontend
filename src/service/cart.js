@@ -1,4 +1,4 @@
-import {apiURL, post, get, put, del, functionURL} from './util'
+import {apiURL, post, get, put, del, functionURL, enableFunctionApi} from './util'
 
 export async function getCart() {
   let res = await get(`${apiURL}/cart`),
@@ -34,6 +34,7 @@ export async function removeFromCart(itemId) {
 }
 
 export async function calSingleTotalPrice(price, number) {
+  if (!enableFunctionApi) return price * number
   let res = await fetch(`${functionURL}/calSingleTotalPrice`, {
     method: 'POST',
     body: `${price * 100}, ${number}`
