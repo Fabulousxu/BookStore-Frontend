@@ -50,7 +50,7 @@ export default function CartPage(props) {
     },
     onNumberAdd = idx => {
       let book = cart[(currPage - 1) * 10 + idx],
-        number = cartList.current.children[idx].children[0].children[2].children[1],
+        number = cartList.current.children[idx].children[0].children[2].children[0].children[1],
         numberVal = parseInt(number.innerHTML)
       setCartItemNumber(book.itemId, numberVal + 1).then(() => {
         number.innerHTML = numberVal + 1
@@ -58,7 +58,7 @@ export default function CartPage(props) {
     },
     onNumberDec = idx => {
       let book = cart[(currPage - 1) * 10 + idx],
-        number = cartList.current.children[idx].children[0].children[2].children[1],
+        number = cartList.current.children[idx].children[0].children[2].children[0].children[1],
         numberVal = parseInt(number.innerHTML)
       if (numberVal === 1) return
       setCartItemNumber(book.itemId, numberVal - 1).then(() => {
