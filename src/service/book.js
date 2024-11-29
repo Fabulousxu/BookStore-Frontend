@@ -24,6 +24,30 @@ export async function searchBooks(keyword, pageIndex, pageSize) {
   }
 }
 
+export async function searchBooksByCategory(category, pageIndex, pageSize) {
+  let res = await get(`${apiURL}/books/category?category=${category}&pageIndex=${pageIndex}&pageSize=${pageSize}`),
+    bookList = []
+  res.items.forEach((item, index) => {
+    bookList.push({
+      id: item.id,
+      title: item.title,
+      author: item.author,
+      price: (item.price / 100).toFixed(2),
+      cover: item.cover,
+      isbn: item.isbn,
+      sales: item.sales,
+      repertory: item.repertory,
+      description: item.description,
+      index: index
+    })
+  })
+  return {
+    totalNumber: res.totalNumber,
+    totalPage: res.totalPage,
+    list: bookList
+  }
+}
+
 export async function getBooks(pageIndex, pageSize) {
   return await searchBooks('', pageIndex, pageSize)
 }
