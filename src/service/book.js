@@ -1,4 +1,4 @@
-import {apiURL, post, get, gatewayURL} from "./util"
+import {apiURL, post, get, gatewayURL, graphQLURL} from "./util"
 
 export async function searchBooks(keyword, pageIndex, pageSize) {
   let res = await get(`${apiURL}/books?keyword=${keyword}&pageIndex=${pageIndex}&pageSize=${pageSize}`),
@@ -27,6 +27,51 @@ export async function searchBooks(keyword, pageIndex, pageSize) {
 export async function searchBooksByCategory(category, pageIndex, pageSize) {
   let res = await get(`${apiURL}/books/category?category=${category}&pageIndex=${pageIndex}&pageSize=${pageSize}`),
     bookList = []
+  res.items.forEach((item, index) => {
+    bookList.push({
+      id: item.id,
+      title: item.title,
+      author: item.author,
+      price: (item.price / 100).toFixed(2),
+      cover: item.cover,
+      isbn: item.isbn,
+      sales: item.sales,
+      repertory: item.repertory,
+      description: item.description,
+      index: index
+    })
+  })
+  return {
+    totalNumber: res.totalNumber,
+    totalPage: res.totalPage,
+    list: bookList
+  }
+}
+
+export async function searchBooksByTitle(title, pageIndex, pageSize) {
+  let res = await post(`${graphQLURL}`, {
+      query: `
+query SearchBooksResponse($title: String!, $pageIndex: Int!, $pageSize: Int!) {
+    searchBooksByTitle(title: $title, pageIndex: $pageIndex, pageSize: $pageSize) {
+        totalNumber
+        totalPage
+        items {
+            id
+            title
+            author
+            isbn
+            description
+            price
+            sales
+            repertory
+            cover
+        }
+    }
+}`,
+      variables: {title, pageIndex, pageSize}
+    }),
+    bookList = []
+  res = res.data.searchBooksByTitle
   res.items.forEach((item, index) => {
     bookList.push({
       id: item.id,

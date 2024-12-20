@@ -3,7 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import MenuBar from '../components/menu-bar'
 import SearchBar from '../components/search-bar'
 import '../css/home.css'
-import {getAuthor, getBooks, searchBooks, searchBooksByCategory} from '../service/book'
+import {
+  getAuthor,
+  getBooks,
+  searchBooks,
+  searchBooksByCategory,
+  searchBooksByTitle
+} from '../service/book'
 import { errorHandle } from '../service/util'
 
 export default function HomePage() {
@@ -66,6 +72,16 @@ export default function HomePage() {
       if (content.length > 0 && content[0] === '#') {
         content = content.substring(1).trim()
         searchBooksByCategory(content, 0, 30).then(res => {
+          setTotalPage(res.totalPage)
+          setCurrPage(1)
+          setBookList(res.list)
+        }).catch(err => errorHandle(err, navigate))
+        return
+      }
+
+      if (content.length > 0 && content.substring(0, 6) === 'title:') {
+        content = content.substring(6).trim()
+        searchBooksByTitle(content, 0, 30).then(res => {
           setTotalPage(res.totalPage)
           setCurrPage(1)
           setBookList(res.list)

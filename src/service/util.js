@@ -3,6 +3,7 @@ export const wsURL = process.env.REACT_APP_WS_URL
 export const gatewayURL = process.env.REACT_APP_GATEWAY_URL
 export const functionURL = process.env.REACT_APP_FUNCTION_URL
 export const enableFunctionApi = process.env.REACT_APP_ENABLE_FUNCTION_API === 'true'
+export const graphQLURL = process.env.REACT_APP_GRAPHQL_URL
 
 export async function get(url) {
   let res = await fetch(url, {
